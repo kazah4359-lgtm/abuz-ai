@@ -1,0 +1,98 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+import feed from '../data/feed.json';
+
+const base = site.base;
+const latestVideos = feed.videos.slice(0, 6);
+const latestPosts = feed.posts.slice(0, 6);
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: site.faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Вайб Кодер',
+  alternateName: site.alternateNames,
+  description: site.description,
+  url: site.url,
+  knowsAbout: site.topics,
+  sameAs: [site.telegram.url, site.youtube.url],
+};
+---
+<BaseLayout
+  title={`${site.name} — ${site.tagline}`}
+  description={site.description}
+  jsonLd={[personJsonLd, faqJsonLd]}
+>
+  <section class="hero">
+    <h1>{site.name}</h1>
+    <p class="lead">{site.description}</p>
+    <div class="cta-row">
+      <a class="btn primary" href={site.telegram.url} target="_blank" rel="noopener">Подписаться в Telegram</a>
+      <a class="btn" href={site.youtube.url} target="_blank" rel="noopener">YouTube «Вайб Кодер»</a>
+    </div>
+    <div>
+      {site.topics.map((t) => <span class="pill">#{t}</span>)}
+    </div>
+  </section>
+
+  <section>
+    <h2>Последние посты в Telegram</h2>
+    {latestPosts.length === 0 ? (
+      <p class="muted">Контент ещё не подгружен. Зайдите позже.</p>
+    ) : (
+      <div class="grid">
+        {latestPosts.map((p) => (
+          <a class="card" href={`${base}/posts/${p.id}/`}>
+            {p.photo && <img class="thumb" src={p.photo} alt={p.title} loading="lazy" />}
+            {!p.photo && p.videoThumb && <img class="thumb" src={p.videoThumb} alt={p.title} loading="lazy" />}
+            <div class="body">
+              <div class="title">{p.title}</div>
+              <div class="meta">{p.datetime ? new Date(p.datetime).toLocaleDateString('ru-RU') : ''} · t.me/{site.telegram.username}/{p.id}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+    <p style="margin-top:14px"><a href={`${base}/posts/`}>Все посты →</a></p>
+  </section>
+
+  <section>
+    <h2>Последние видео на YouTube</h2>
+    {latestVideos.length === 0 ? (
+      <p class="muted">Видео ещё не подгружены.</p>
+    ) : (
+      <div class="grid">
+        {latestVideos.map((v) => (
+          <a class="card" href={`${base}/videos/${v.id}/`}>
+            <img class="thumb" src={v.thumbnail} alt={v.title} loading="lazy" />
+            <div class="body">
+              <div class="title">{v.title}</div>
+              <div class="meta">{v.published ? new Date(v.published).toLocaleDateString('ru-RU') : ''} · {v.author}</div>
+            </div>
+          </a>
+        ))}
+      </div>
+    )}
+    <p style="margin-top:14px"><a href={`${base}/videos/`}>Все видео →</a></p>
+  </section>
+
+  <section>
+    <h2>Часто задаваемые вопросы</h2>
+    {site.faqs.map((f) => (
+      <details class="faq">
+        <summary>{f.q}</summary>
+        <p>{f.a}</p>
+      </details>
+    ))}
+  </section>
+</BaseLayout>

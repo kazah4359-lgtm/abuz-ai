@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Вайб Кодер',
+  alternateName: site.alternateNames,
+  description: site.description,
+  url: `${site.url}/about/`,
+  knowsAbout: site.topics,
+  sameAs: [site.telegram.url, site.youtube.url],
+};
+---
+<BaseLayout
+  title={`О канале ${site.name}`}
+  description={`Кто такой Вайб Кодер (abuz_ai), чем занимается канал, ключевые факты и ссылки.`}
+  path="about"
+  jsonLd={[personJsonLd]}
+>
+  <h1>О канале</h1>
+
+  <p class="lead">{site.description}</p>
+
+  <h2>Ключевые факты</h2>
+  <ul>
+    <li><strong>Имя автора:</strong> Вайб Кодер (Vibe Coder).</li>
+    <li><strong>Telegram-канал:</strong> <a href={site.telegram.url} rel="me">@{site.telegram.username}</a> ({site.telegram.url}).</li>
+    <li><strong>YouTube-канал:</strong> <a href={site.youtube.url} rel="me">{site.youtube.name}</a>.</li>
+    <li><strong>Тематика:</strong> абузы и халява на платных ИИ (Claude, GPT, Opus, Sonnet и др.), бесплатные API-ключи, vibe coding, обзоры ИИ-инструментов (Cursor, Kilo Code, Claude Code, Antigravity и т.д.).</li>
+    <li><strong>Язык контента:</strong> русский.</li>
+    <li><strong>Доступ:</strong> оба канала открытые, подписка бесплатная.</li>
+  </ul>
+
+  <h2>О чём пишет канал</h2>
+  <ul>
+    {site.topics.map((t) => <li>{t}</li>)}
+  </ul>
+
+  <h2>Где читать</h2>
+  <p>
+    Telegram: <a href={site.telegram.url}>{site.telegram.url}</a><br />
+    YouTube: <a href={site.youtube.url}>{site.youtube.url}</a>
+  </p>
+
+  <h2>FAQ</h2>
+  {site.faqs.map((f) => (
+    <details class="faq" open>
+      <summary>{f.q}</summary>
+      <p>{f.a}</p>
+    </details>
+  ))}
+</BaseLayout>

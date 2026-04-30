@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+import feed from '../../data/feed.json';
+
+const base = site.base;
+const posts = feed.posts;
+---
+<BaseLayout
+  title={`Все посты Telegram-канала ${site.shortName}`}
+  description={`Архив постов Telegram-канала @${site.telegram.username} (${site.name}).`}
+  path="posts"
+>
+  <h1>Telegram: все посты</h1>
+  <p class="muted">Последние {posts.length} публичных постов канала <a href={site.telegram.url}>@{site.telegram.username}</a>. Обновляется автоматически.</p>
+
+  {posts.length === 0 ? (
+    <p>Контент ещё не подгружен.</p>
+  ) : (
+    <div class="grid">
+      {posts.map((p) => (
+        <a class="card" href={`${base}/posts/${p.id}/`}>
+          {p.photo && <img class="thumb" src={p.photo} alt={p.title} loading="lazy" />}
+          {!p.photo && p.videoThumb && <img class="thumb" src={p.videoThumb} alt={p.title} loading="lazy" />}
+          <div class="body">
+            <div class="title">{p.title}</div>
+            <div class="meta">{p.datetime ? new Date(p.datetime).toLocaleDateString('ru-RU') : ''} · #{p.id}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+  )}
+</BaseLayout>

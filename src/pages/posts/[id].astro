@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const data = (await import('../../data/feed.json')).default;
+  return data.posts.map((p) => ({
+    params: { id: p.id },
+    props: { post: p },
+  }));
+}
+
+const { post } = Astro.props;
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SocialMediaPosting',
+  headline: post.title,
+  articleBody: post.text,
+  url: post.url,
+  datePublished: post.datetime,
+  inLanguage: 'ru',
+  author: {
+    '@type': 'Person',
+    name: 'Вайб Кодер',
+    url: site.url,
+    sameAs: [site.telegram.url, site.youtube.url],
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: site.name,
+    url: site.url,
+  },
+  ...(post.photo ? { image: post.photo } : {}),
+  ...(post.videoThumb ? { thumbnailUrl: post.videoThumb } : {}),
+};
+---
+<BaseLayout
+  title={`${post.title} — ${site.shortName}`}
+  description={post.text ? post.text.slice(0, 200) : post.title}
+  path={`posts/${post.id}`}
+  ogImage={post.photo || post.videoThumb || undefined}
+  jsonLd={[articleJsonLd]}
+>
+  <p class="muted"><a href={`${site.base}/posts/`}>← Все посты</a></p>
+  <h1>{post.title}</h1>
+  <p class="muted">
+    {post.datetime ? new Date(post.datetime).toLocaleString('ru-RU') : ''} ·
+    <a href={post.url} target="_blank" rel="noopener">открыть в Telegram →</a>
+  </p>
+
+  {post.photo && <img class="thumb" style="border-radius:14px;margin:14px 0" src={post.photo} alt={post.title} />}
+
+  {post.text && <div class="post-text">{post.text}</div>}
+
+  <p style="margin-top:18px"><a class="btn primary" href={post.url} target="_blank" rel="noopener">Читать в Telegram</a></p>
+</BaseLayout>
