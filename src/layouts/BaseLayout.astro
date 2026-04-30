@@ -244,6 +244,91 @@ const base = site.base;
         font-size: 16px;
       }
       details.faq[open] { border-color: var(--accent); }
+
+      /* Article (guide) typography */
+      article.guide { max-width: 800px; }
+      article.guide h2 { font-size: 24px; margin: 36px 0 12px; }
+      article.guide h3 { font-size: 19px; margin: 24px 0 10px; }
+      article.guide p,
+      article.guide li {
+        font-size: 16px;
+        color: var(--fg);
+      }
+      article.guide ul, article.guide ol { padding-left: 22px; }
+      article.guide li { margin-bottom: 6px; }
+      article.guide blockquote {
+        border-left: 3px solid var(--accent);
+        margin: 16px 0;
+        padding: 4px 16px;
+        color: var(--muted);
+        background: var(--bg-2);
+        border-radius: 0 8px 8px 0;
+      }
+      article.guide code {
+        background: #1a1f2c;
+        padding: 2px 6px;
+        border-radius: 6px;
+        font-size: 14px;
+        color: #ffd57a;
+      }
+      article.guide pre {
+        background: #11141c;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px 16px;
+        overflow-x: auto;
+      }
+      article.guide pre code { background: transparent; padding: 0; color: var(--fg); }
+      article.guide table {
+        border-collapse: collapse;
+        width: 100%;
+        margin: 18px 0;
+        font-size: 15px;
+      }
+      article.guide th, article.guide td {
+        padding: 10px 12px;
+        text-align: left;
+        border: 1px solid var(--border);
+      }
+      article.guide th { background: var(--bg-2); }
+      article.guide .tldr {
+        background: linear-gradient(135deg, rgba(110, 231, 255, 0.08), rgba(183, 148, 244, 0.08));
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 18px 20px;
+        margin: 20px 0 30px;
+      }
+      article.guide .tldr h2 { margin-top: 0; font-size: 18px; color: var(--accent); }
+      article.guide .meta-row { color: var(--muted); font-size: 14px; margin: 6px 0 22px; }
+      article.guide .step {
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        border-left: 3px solid var(--accent);
+        border-radius: 10px;
+        padding: 14px 18px;
+        margin: 14px 0;
+      }
+      article.guide .warn {
+        background: rgba(255, 200, 100, 0.06);
+        border: 1px solid rgba(255, 200, 100, 0.3);
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin: 14px 0;
+        font-size: 15px;
+      }
+      .guide-list-card {
+        background: var(--bg-2);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 18px 20px;
+        margin-bottom: 14px;
+        transition: border-color .15s ease, transform .15s ease;
+      }
+      .guide-list-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+      .guide-list-card h3 { margin: 0 0 6px; }
+      .guide-list-card h3 a { color: var(--fg); }
+      .guide-list-card h3 a:hover { color: var(--accent); text-decoration: none; }
+      .guide-list-card .lead { color: var(--muted); margin: 6px 0 0; font-size: 15px; }
     </style>
   </head>
   <body>
@@ -252,6 +337,7 @@ const base = site.base;
         <a href={`${base}/`} class="brand">{site.shortName}</a>
         <nav>
           <a href={`${base}/`}>Главная</a>
+          <a href={`${base}/guides/`}>Гайды</a>
           <a href={`${base}/posts/`}>Telegram</a>
           <a href={`${base}/videos/`}>YouTube</a>
           <a href={`${base}/about/`}>О канале</a>

@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+import { guides } from '../../data/guides';
+
+const title = `Гайды по халяве на ИИ — ${site.name}`;
+const description = `Гайды и пошаговые инструкции от канала ${site.name}: как бесплатно подключить Claude Opus, GPT 5.5 и другие топовые модели через акции, кредиты от провайдеров и партнёрские программы.`;
+const base = site.base;
+
+const collectionLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: title,
+  description,
+  url: `${site.url}/guides/`,
+  inLanguage: 'ru',
+  isPartOf: { '@type': 'WebSite', name: site.name, url: site.url },
+  hasPart: guides.map((g) => ({
+    '@type': 'Article',
+    headline: g.title,
+    description: g.description,
+    url: `${site.url}/guides/${g.slug}/`,
+    datePublished: g.datePublished,
+    dateModified: g.dateModified,
+    inLanguage: 'ru',
+    author: { '@type': 'Person', name: 'Вайб Кодер', url: site.url },
+  })),
+};
+---
+
+<BaseLayout title={title} description={description} path="guides/" jsonLd={[collectionLd]}>
+  <section class="hero">
+    <h1>Гайды по халяве на ИИ</h1>
+    <p class="lead">
+      Пошаговые инструкции по бесплатному доступу к Claude Opus, GPT, Sonnet и
+      другим топовым нейросетям. Все методы — официальные акции и партнёрские
+      программы провайдеров API. Обновляются вместе с актуальными промокодами
+      и акциями.
+    </p>
+  </section>
+
+  <section style="margin-top: 24px;">
+    {guides.map((g) => (
+      <div class="guide-list-card">
+        <h3>
+          <a href={`${base}/guides/${g.slug}/`}>{g.title}</a>
+        </h3>
+        <p class="lead">{g.lead}</p>
+        <p class="muted" style="font-size: 13px; margin-top: 10px;">
+          Опубликовано: {g.datePublished}
+          {g.dateModified !== g.datePublished && <> · Обновлено: {g.dateModified}</>}
+          {' · '}
+          {g.topics.slice(0, 4).map((t) => (
+            <span class="pill">{t}</span>
+          ))}
+        </p>
+      </div>
+    ))}
+  </section>
+
+  <section style="margin-top: 40px; padding: 18px 20px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-2);">
+    <h3 style="margin-top: 0;">Как пользоваться этими гайдами</h3>
+    <p>
+      Каждый гайд — самостоятельная статья со всеми шагами от регистрации до
+      подключения API-ключа в редактор кода. Если что-то не получилось,
+      пиши в TG: <a href={site.telegram.url}>{site.telegram.url}</a>.
+    </p>
+    <p>
+      Свежие акции и подробные видео-разборы выходят на YouTube
+      «<a href={site.youtube.url}>Вайб Кодер</a>» — если эти гайды зашли,
+      подпишись там тоже.
+    </p>
+  </section>
+</BaseLayout>

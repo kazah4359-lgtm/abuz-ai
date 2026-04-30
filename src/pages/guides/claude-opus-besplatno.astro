@@ -1,0 +1,359 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+import { guides } from '../../data/guides';
+
+const meta = guides.find((g) => g.slug === 'claude-opus-besplatno')!;
+const base = site.base;
+const url = `${site.url}/guides/${meta.slug}/`;
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: meta.title,
+  description: meta.description,
+  url,
+  inLanguage: 'ru',
+  datePublished: meta.datePublished,
+  dateModified: meta.dateModified,
+  author: { '@type': 'Person', name: 'Вайб Кодер', url: site.url, sameAs: [site.telegram.url, site.youtube.url] },
+  publisher: { '@type': 'Person', name: 'Вайб Кодер', url: site.url },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  keywords: meta.topics.join(', '),
+  about: meta.topics.map((t) => ({ '@type': 'Thing', name: t })),
+  isPartOf: { '@type': 'WebSite', name: site.name, url: site.url },
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Можно ли реально пользоваться Claude Opus 4.7 и GPT 5.5 бесплатно?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Да. Есть несколько официальных способов: партнёрские провайдеры с промо-кредитами (agentrouter, OpenRouter), бонусы для разработчиков (CodeRabbit, GitHub Copilot Chat), Free-тарифы у самих лабораторий, AI Studio от Google для Gemini Pro. В сумме при правильной комбинации — десятки часов плотной работы в месяц без оплаты.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Безопасно ли пользоваться сторонними провайдерами вроде agentrouter?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Это легальные коммерческие провайдеры с собственными контрактами с лабораториями. Они не используют твой аккаунт у Anthropic / OpenAI и не нарушают их ToS. Ограничение одно: данные ты передаёшь через ещё одного посредника, поэтому конфиденциальные документы лучше через них не гонять.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Чем отличается Claude Opus 4.7 от Claude Sonnet?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Opus — самая мощная и самая медленная/дорогая модель Anthropic, лучшая для сложного reasoning, длинных рефакторингов, сложных архитектурных задач. Sonnet — золотая середина: быстрее и дешевле в 5-10 раз, при этом для большинства повседневных задач кодинга её хватает с запасом. Профессиональный совет: 80% задач делать на Sonnet, Opus звать точечно.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Какой способ из перечисленных самый выгодный?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'По соотношению "усилия / выхлоп" сейчас лидирует agentrouter.org с акцией $250 — за 15 минут регистрации получаешь равный $250 бюджет на любые модели. На втором месте — связка Free-tier у Anthropic + кредиты OpenRouter. На третьем — бонус CodeRabbit $60 для тех, кто работает с код-ревью.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Это надолго? Не закроют ли все эти схемы?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Конкретные акции — нет, они приходят и уходят. Сама экосистема прокси-провайдеров и партнёрских кредитов — стабильна, у крупных лабораторий это часть маркетинга. Чтобы быть в курсе актуального — подпишись на TG-канал @abuz_ai, там анонсируются все рабочие схемы день в день.',
+      },
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  path={`guides/${meta.slug}/`}
+  jsonLd={[articleLd, faqLd]}
+>
+  <article class="guide">
+    <p style="margin-top: 30px;"><a href={`${base}/guides/`}>← Все гайды</a></p>
+    <h1>{meta.title}</h1>
+    <p class="meta-row">
+      Опубликовано: {meta.datePublished}
+      {meta.dateModified !== meta.datePublished && <> · Обновлено: {meta.dateModified}</>}
+      {' · '}автор: <a href={site.url}>Вайб Кодер</a> · источники:
+      <a href={site.telegram.url}> Telegram</a> · <a href={site.youtube.url}>YouTube</a>
+    </p>
+
+    <div class="tldr">
+      <h2>TL;DR</h2>
+      <ul>
+        <li><strong>5 рабочих способов</strong> получить Claude Opus 4.7 и GPT 5.5 бесплатно — все легальные.</li>
+        <li>Самый быстрый: <strong>agentrouter.org $250 кредитов</strong> (отдельный <a href={`${base}/guides/agentrouter-250/`}>гайд</a>).</li>
+        <li>Самый стабильный: <strong>Free-тариф Anthropic + OpenRouter</strong>.</li>
+        <li>Для разработчиков: <strong>CodeRabbit $60</strong> на код-ревью.</li>
+        <li>Бонусом — Gemini Pro в Google AI Studio (бесплатно с лимитами) и кредиты GitHub Copilot Chat.</li>
+      </ul>
+    </div>
+
+    <h2>Сравнительная таблица</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Способ</th>
+          <th>Что даёт</th>
+          <th>Сложность</th>
+          <th>Актуально на</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>agentrouter.org</td>
+          <td>До $250 на Opus 4.7, GPT 5.5, Sonnet</td>
+          <td>Низкая (15 мин)</td>
+          <td>30.04.2026</td>
+        </tr>
+        <tr>
+          <td>OpenRouter Free + Anthropic</td>
+          <td>Бесплатные модели + микро-кредиты на Opus</td>
+          <td>Низкая</td>
+          <td>Постоянно</td>
+        </tr>
+        <tr>
+          <td>Anthropic Free Tier (claude.ai)</td>
+          <td>Sonnet с лимитами в чате</td>
+          <td>Минимальная</td>
+          <td>Постоянно</td>
+        </tr>
+        <tr>
+          <td>CodeRabbit $60</td>
+          <td>$60 на API-кредиты для код-ревью</td>
+          <td>Средняя (USA-прокси)</td>
+          <td>26.04.2026</td>
+        </tr>
+        <tr>
+          <td>Google AI Studio</td>
+          <td>Бесплатный Gemini Pro 2.5 / 3 с большим контекстом</td>
+          <td>Минимальная</td>
+          <td>Постоянно</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="agentrouter">Способ 1. agentrouter.org — $250 кредитов одной регистрацией</h2>
+    <p>
+      Самый быстрый и универсальный путь на сегодня. agentrouter.org — это
+      OpenAI-совместимый прокси, который агрегирует доступ к Claude Opus 4.7,
+      GPT 5.5, Sonnet и Gemini Pro через единый API-ключ. По текущей акции
+      (на апрель 2026) дают <strong>до $250 промо-кредитов</strong> новым
+      аккаунтам без привязки карты.
+    </p>
+    <p>
+      Кредиты можно тратить на любые модели — то есть фактически это эквивалент
+      $250 на ChatGPT Plus + Claude Pro + Cursor вместе взятых.
+    </p>
+    <p>
+      Подробная пошаговая инструкция с видео и скринами — в отдельном гайде:
+      <a href={`${base}/guides/agentrouter-250/`}><strong>$250 на agentrouter.org →</strong></a>
+    </p>
+    <ul>
+      <li><strong>Плюсы:</strong> один ключ ко всем моделям, работает с Cursor / Kilo Code / Cline / Roo Code.</li>
+      <li><strong>Минусы:</strong> акция временная — может закрыться, лимит на email.</li>
+    </ul>
+
+    <h2 id="openrouter">Способ 2. OpenRouter Free + бесплатные кредиты Anthropic</h2>
+    <p>
+      <a href="https://openrouter.ai" rel="nofollow noopener" target="_blank">OpenRouter</a> —
+      крупнейший прокси-провайдер моделей. У них есть несколько постоянных
+      бесплатных пунктов:
+    </p>
+    <ul>
+      <li>
+        <strong>Free-теги моделей:</strong> в каталоге OpenRouter ищи модели с
+        тегом <code>:free</code> — это, например, бесплатные версии DeepSeek,
+        Llama, Qwen, GLM и других open-source моделей. Лимиты есть, но для
+        обычной работы хватает.
+      </li>
+      <li>
+        <strong>Anthropic free credits:</strong> при подключении API-ключа
+        Anthropic к OpenRouter иногда (зависит от региона) даются стартовые
+        $5–10 кредитов на Claude.
+      </li>
+      <li>
+        <strong>BYOK маршрутизация:</strong> можно использовать OpenRouter как
+        обёртку для собственных бесплатных ключей других провайдеров —
+        агенты ходят через единый API.
+      </li>
+    </ul>
+    <p>
+      Как подключить:
+    </p>
+    <ol>
+      <li>Регистрация на <a href="https://openrouter.ai" rel="nofollow noopener" target="_blank">openrouter.ai</a>.</li>
+      <li>Создать API-ключ.</li>
+      <li>В кодинг-агенте указать <code>https://openrouter.ai/api/v1</code> как base URL и ключ.</li>
+      <li>В поле модели указать <code>anthropic/claude-3.5-sonnet</code> или нужный free-тег.</li>
+    </ol>
+
+    <h2 id="claude-ai">Способ 3. Anthropic Free Tier на claude.ai</h2>
+    <p>
+      Сама Anthropic даёт бесплатный доступ к <strong>Claude Sonnet</strong> в
+      web-чате <a href="https://claude.ai" rel="nofollow noopener" target="_blank">claude.ai</a>.
+      Это самый простой и абсолютно официальный способ.
+    </p>
+    <ul>
+      <li>Регистрация по email или Google.</li>
+      <li>Лимиты: ~30–50 сообщений в сутки (плавающий, зависит от нагрузки).</li>
+      <li>Только web-интерфейс, API-ключа не дают.</li>
+    </ul>
+    <div class="warn">
+      В <strong>России</strong> claude.ai заблокирован: нужен VPN с гео-привязкой
+      к стране, где сервис доступен (US, EU, UK). Регистрация на временный почтовый
+      ящик не сработает — Anthropic просит привязать живой телефон с поддерживаемого
+      номера.
+    </div>
+    <p>
+      Лучше всего комбинировать: claude.ai — для длинных диалогов и фронтенда,
+      API через agentrouter / OpenRouter — для интеграции в Cursor / Cline.
+    </p>
+
+    <h2 id="coderabbit">Способ 4. CodeRabbit — $60 для разработчиков</h2>
+    <p>
+      <a href="https://coderabbit.ai" rel="nofollow noopener" target="_blank">CodeRabbit</a> —
+      инструмент AI-ревью PR на GitHub. У них акция: <strong>$60 кредитов</strong>
+      для новых пользователей. Технически это бонус именно на их сервис, но
+      внутри они используют те же модели Claude и GPT, и для ревью кода 1×PR
+      это весьма щедрый бюджет.
+    </p>
+    <p>
+      Алгоритм:
+    </p>
+    <ol>
+      <li>Готовим прокси с гео <strong>США</strong> 🇺🇸 (это требование акции; обычные европейские прокси не подходят).</li>
+      <li>Регистрируемся на coderabbit.ai через GitHub-аккаунт.</li>
+      <li>Подключаем CodeRabbit к одному из своих репо (можно создать тестовый).</li>
+      <li>В дашборде проверяем, что бонус $60 зачислен.</li>
+      <li>Активируем ревью на любых PR — ИИ начнёт писать комментарии и инлайн-предложения.</li>
+    </ol>
+    <p>
+      Полная пошаговая схема с подбором прокси — в Telegram-канале
+      <a href={site.telegram.url}>@abuz_ai</a> (закреплённый пост).
+    </p>
+    <ul>
+      <li><strong>Плюсы:</strong> $60 — приличный бюджет, реальная польза для тех, кто работает в команде.</li>
+      <li><strong>Минусы:</strong> нужен прокси USA, привязка к GitHub.</li>
+    </ul>
+
+    <h2 id="gemini">Способ 5. Google AI Studio — Gemini Pro бесплатно</h2>
+    <p>
+      Google даёт самый щедрый Free-тариф из всех больших лабораторий:
+      <a href="https://aistudio.google.com" rel="nofollow noopener" target="_blank">Google AI Studio</a>
+      пускает к <strong>Gemini Pro</strong> бесплатно с очень большими лимитами
+      и контекстом до 1M токенов.
+    </p>
+    <ul>
+      <li>Регистрация — по Google-аккаунту.</li>
+      <li>Получаешь API-ключ (Free tier).</li>
+      <li>Лимиты на момент 04.2026: ~1500 запросов в сутки на Gemini 2.5 / 3 Pro.</li>
+      <li>Контекст до 1M токенов — реально удобно для больших кодовых баз и анализа документов.</li>
+    </ul>
+    <p>
+      Минус один: это не Claude и не GPT — модели по-разному отрабатывают
+      инструкции, особенно в роли «агента». Для длинных reasoning-задач
+      Gemini Pro 3 уже сравним с Opus, но для агентного кодинга
+      Sonnet/Opus всё ещё выигрывают.
+    </p>
+    <p>
+      Подключение через OpenAI-совместимый интерфейс есть в OpenRouter и
+      в нескольких сторонних обёртках. Прямо из Cursor — через Custom OpenAI URL
+      сейчас не работает (Google не даёт OpenAI-совместимый endpoint в стандартном виде),
+      нужен прокси.
+    </p>
+
+    <h2>Бонус: что забыли</h2>
+    <p>
+      Кроме перечисленного, периодически появляются и другие схемы — но они
+      менее стабильны:
+    </p>
+    <ul>
+      <li>
+        <strong>GitHub Copilot Chat</strong> для студентов и образовательных
+        аккаунтов — бесплатный доступ через <em>GitHub Education</em>.
+      </li>
+      <li>
+        <strong>Cursor Pro</strong> — частые промо-периоды по 1–2 месяца через
+        партнёров (хакатоны, edu-программы).
+      </li>
+      <li>
+        <strong>Open-source модели</strong> локально: Qwen 3 Coder, DeepSeek-Coder,
+        Llama 3.3. Это другой подход — нужны мощности, но 0 рублей и оффлайн.
+      </li>
+    </ul>
+
+    <h2>Какой способ выбрать?</h2>
+    <ul>
+      <li>
+        <strong>Если нужен максимум сразу:</strong> agentrouter.org $250 →
+        качественные модели, минимум возни. <a href={`${base}/guides/agentrouter-250/`}>Гайд</a>.
+      </li>
+      <li>
+        <strong>Если хочется надолго:</strong> Google AI Studio (Gemini Pro) +
+        OpenRouter Free + Anthropic Free Tier. Это бесплатный набор, который
+        не зависит от временных акций.
+      </li>
+      <li>
+        <strong>Если работа связана с код-ревью:</strong> CodeRabbit бонус $60.
+      </li>
+      <li>
+        <strong>Если работаешь в Cursor:</strong> Cursor + agentrouter (override
+        Base URL) — в этой связке агентский кодинг получается дешевле всего.
+      </li>
+    </ul>
+
+    <h2>FAQ</h2>
+    <details class="faq" open>
+      <summary>Реально ли пользоваться Claude Opus и GPT 5.5 бесплатно?</summary>
+      <p>
+        Да. Связка agentrouter $250 + Free-tier Anthropic + Google AI Studio +
+        OpenRouter free покрывает большинство задач без оплаты. Единственное —
+        если нужна непрерывная работа 24/7 на Opus, придётся либо
+        ротировать акции, либо в какой-то момент пополнить баланс.
+      </p>
+    </details>
+    <details class="faq">
+      <summary>Можно ли использовать всё это для коммерческой работы?</summary>
+      <p>
+        Промо-кредиты обычно ограничены личным использованием. Free-тарифы
+        без явного коммерческого запрета — можно, но рисковано: разовые
+        проекты ок, постоянная команда — лучше через платные тарифы.
+        Читай Terms каждого провайдера.
+      </p>
+    </details>
+    <details class="faq">
+      <summary>Чем плох прокси-провайдер? Почему не идти напрямую?</summary>
+      <p>
+        Прокси добавляет ещё одно звено в цепочке (твои данные через них
+        проходят). Для большинства задач кодинга это не критично, но для
+        корпоративных секретов лучше использовать прямые ключи Anthropic / OpenAI.
+        Плюс прокси — единый ключ ко всем моделям и часто более выгодные акции.
+      </p>
+    </details>
+    <details class="faq">
+      <summary>Где брать актуальные обновления?</summary>
+      <p>
+        В Telegram-канале <a href={site.telegram.url}>@abuz_ai</a> и на YouTube
+        «<a href={site.youtube.url}>Вайб Кодер</a>». Этот гайд тоже обновляется —
+        возвращайся периодически, дата обновления в шапке.
+      </p>
+    </details>
+
+    <h2>Соседние гайды</h2>
+    <ul>
+      <li><a href={`${base}/guides/agentrouter-250/`}>Подробная инструкция по agentrouter.org $250</a></li>
+      <li><a href={`${base}/guides/qwen-cli-alternativy/`}>Qwen Code CLI закрылся — 5 рабочих альтернатив</a></li>
+    </ul>
+  </article>
+</BaseLayout>

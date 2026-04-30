@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { site } from '../data/site';
+import { guides } from '../data/guides';
 import feed from '../data/feed.json';
 
 const base = site.base;
@@ -43,6 +44,20 @@ const personJsonLd = {
     <div>
       {site.topics.map((t) => <span class="pill">#{t}</span>)}
     </div>
+  </section>
+
+  <section>
+    <h2>Гайды</h2>
+    <p class="muted" style="margin-top: -6px;">
+      Пошаговые инструкции по бесплатному доступу к Claude Opus, GPT и другим топовым моделям.
+    </p>
+    {guides.map((g) => (
+      <div class="guide-list-card">
+        <h3><a href={`${base}/guides/${g.slug}/`}>{g.title}</a></h3>
+        <p class="lead">{g.lead}</p>
+      </div>
+    ))}
+    <p style="margin-top:14px"><a href={`${base}/guides/`}>Все гайды →</a></p>
   </section>
 
   <section>

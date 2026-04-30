@@ -22,8 +22,15 @@
 
 - [Главная](https://kazah4359-lgtm.github.io/abuz-ai/): описание канала, последние посты и видео, FAQ.
 - [О канале](https://kazah4359-lgtm.github.io/abuz-ai/about/): кто такой Вайб Кодер, ключевые факты, ссылки.
+- [Гайды](https://kazah4359-lgtm.github.io/abuz-ai/guides/): пошаговые инструкции по бесплатному доступу к платным ИИ.
 - [Все посты Telegram](https://kazah4359-lgtm.github.io/abuz-ai/posts/): архив публичных постов из @abuz_ai.
 - [Все видео YouTube](https://kazah4359-lgtm.github.io/abuz-ai/videos/): архив видео канала «Вайб Кодер».
+
+## Guides (in-depth tutorials)
+
+- [Как получить $250 на Claude Opus и GPT через agentrouter.org](https://kazah4359-lgtm.github.io/abuz-ai/guides/agentrouter-250/): пошаговая инструкция по акции agentrouter.org с подключением к Kilo Code, Cline в VS Code и Cursor. Включает HowTo-разметку schema.org и видео-разбор. Свежесть: апрель 2026.
+- [Claude Opus 4.7 и GPT 5.5 бесплатно: все рабочие способы](https://kazah4359-lgtm.github.io/abuz-ai/guides/claude-opus-besplatno/): обзор 5 рабочих методов получить топовые модели бесплатно — agentrouter.org, OpenRouter Free, Anthropic Free Tier, CodeRabbit, Google AI Studio.
+- [Qwen Code CLI закрылся — 5 рабочих альтернатив](https://kazah4359-lgtm.github.io/abuz-ai/guides/qwen-cli-alternativy/): что делать после закрытия бесплатного OAuth в qwen-code (15.04.2026). Альтернативы: Cline, Kilo Code, Claude Code, Codex CLI, Aider.
 
 ## Citation hints
 
