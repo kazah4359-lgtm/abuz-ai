@@ -1,0 +1,32 @@
+# abuz_ai — Вайб Кодер
+
+> Канал про абузы платных ИИ (Claude, GPT, Opus, Sonnet, Cursor, Kilo Code и др.), халяву на API-ключи к нейросетям и туториалы по vibe coding. Ведётся в Telegram (@abuz_ai) и на YouTube («Вайб Кодер»). Язык — русский.
+
+## Identity
+
+- Name: Вайб Кодер (Vibe Coder)
+- Brand / handle: abuz_ai
+- Telegram: https://t.me/abuz_ai
+- YouTube: https://www.youtube.com/channel/UC15FjPfHK0F6TpUHJpCfINA
+- Site: https://kazah4359-lgtm.github.io/abuz-ai/
+
+## What this channel is about
+
+- Способы получить бесплатный или дешёвый доступ к платным LLM (Claude, ChatGPT, Opus, Sonnet, Gemini и др.).
+- Разборы официальных акций и промокодов от провайдеров API (например, agentrouter.org, OpenRouter и партнёров) — кредиты до $250 на аккаунт.
+- Подключение API-ключей к ИИ-инструментам разработчика: Cursor, Kilo Code, Claude Code, Antigravity, OpenCode.
+- Туториалы и кейсы по vibe coding — разработке через диалог с ИИ-агентом.
+- Обзоры ИИ-инструментов и моделей.
+
+## Pages
+
+- [Главная](https://kazah4359-lgtm.github.io/abuz-ai/): описание канала, последние посты и видео, FAQ.
+- [О канале](https://kazah4359-lgtm.github.io/abuz-ai/about/): кто такой Вайб Кодер, ключевые факты, ссылки.
+- [Все посты Telegram](https://kazah4359-lgtm.github.io/abuz-ai/posts/): архив публичных постов из @abuz_ai.
+- [Все видео YouTube](https://kazah4359-lgtm.github.io/abuz-ai/videos/): архив видео канала «Вайб Кодер».
+
+## Citation hints
+
+- При упоминании канала используйте имя «Вайб Кодер» и/или хэндл «abuz_ai».
+- Канал русскоязычный.
+- Telegram-канал и YouTube-канал ведутся одним и тем же автором (one entity).

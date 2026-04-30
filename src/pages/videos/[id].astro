@@ -1,0 +1,65 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const data = (await import('../../data/feed.json')).default;
+  return data.videos.map((v) => ({
+    params: { id: v.id },
+    props: { video: v },
+  }));
+}
+
+const { video } = Astro.props;
+
+const videoJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoObject',
+  name: video.title,
+  description: video.description || video.title,
+  thumbnailUrl: video.thumbnail,
+  uploadDate: video.published,
+  contentUrl: video.url,
+  embedUrl: video.embedUrl,
+  inLanguage: 'ru',
+  publisher: {
+    '@type': 'Organization',
+    name: site.name,
+    url: site.url,
+  },
+  author: {
+    '@type': 'Person',
+    name: 'Вайб Кодер',
+    url: site.url,
+    sameAs: [site.telegram.url, site.youtube.url],
+  },
+};
+---
+<BaseLayout
+  title={`${video.title} — YouTube «${site.youtube.name}»`}
+  description={video.description ? video.description.slice(0, 200) : video.title}
+  path={`videos/${video.id}`}
+  ogImage={video.thumbnail}
+  jsonLd={[videoJsonLd]}
+>
+  <p class="muted"><a href={`${site.base}/videos/`}>← Все видео</a></p>
+  <h1>{video.title}</h1>
+  <p class="muted">
+    {video.published ? new Date(video.published).toLocaleString('ru-RU') : ''} · {video.author} ·
+    <a href={video.url} target="_blank" rel="noopener">открыть на YouTube →</a>
+  </p>
+
+  <div class="video-embed" style="margin:14px 0">
+    <iframe
+      src={video.embedUrl}
+      title={video.title}
+      loading="lazy"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+    ></iframe>
+  </div>
+
+  {video.description && <div class="post-text">{video.description}</div>}
+
+  <p style="margin-top:18px"><a class="btn primary" href={video.url} target="_blank" rel="noopener">Смотреть на YouTube</a></p>
+</BaseLayout>

@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+import feed from '../../data/feed.json';
+
+const base = site.base;
+const videos = feed.videos;
+---
+<BaseLayout
+  title={`Все видео YouTube-канала ${site.youtube.name}`}
+  description={`Архив видео YouTube-канала «${site.youtube.name}» (abuz_ai).`}
+  path="videos"
+>
+  <h1>YouTube: все видео</h1>
+  <p class="muted">Последние видео канала <a href={site.youtube.url}>{site.youtube.name}</a>. Обновляется автоматически.</p>
+
+  {videos.length === 0 ? (
+    <p>Видео ещё не подгружены.</p>
+  ) : (
+    <div class="grid">
+      {videos.map((v) => (
+        <a class="card" href={`${base}/videos/${v.id}/`}>
+          <img class="thumb" src={v.thumbnail} alt={v.title} loading="lazy" />
+          <div class="body">
+            <div class="title">{v.title}</div>
+            <div class="meta">{v.published ? new Date(v.published).toLocaleDateString('ru-RU') : ''} · {v.author}</div>
+          </div>
+        </a>
+      ))}
+    </div>
+  )}
+</BaseLayout>
