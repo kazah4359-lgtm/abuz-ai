@@ -1,0 +1,364 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+import { guides } from '../../data/guides';
+
+const meta = guides.find((g) => g.slug === 'qwen-cli-alternativy')!;
+const base = site.base;
+const url = `${site.url}/guides/${meta.slug}/`;
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: meta.title,
+  description: meta.description,
+  url,
+  inLanguage: 'ru',
+  datePublished: meta.datePublished,
+  dateModified: meta.dateModified,
+  author: { '@type': 'Person', name: 'Вайб Кодер', url: site.url, sameAs: [site.telegram.url, site.youtube.url] },
+  publisher: { '@type': 'Person', name: 'Вайб Кодер', url: site.url },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  keywords: meta.topics.join(', '),
+  about: meta.topics.map((t) => ({ '@type': 'Thing', name: t })),
+  isPartOf: { '@type': 'WebSite', name: site.name, url: site.url },
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Почему Qwen Code CLI перестал работать?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'С 15 апреля 2026 Alibaba Cloud прикрыла бесплатный OAuth-доступ в официальном qwen-code CLI. Теперь все запросы идут через платный API DashScope. Само по себе использование Qwen-моделей не запрещено — закрыли только халявный безлимит, который активно использовали вайбкодеры.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Какая альтернатива максимально похожа на Qwen Code CLI по UX?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Cline (расширение VS Code) и Aider (CLI). Cline даёт почти такой же чат-агентский интерфейс, как qwen-code, но в окне VS Code. Aider — это CLI-агент, очень похожий по логике на qwen-code, плюс нативно работает с git: коммитит изменения за тебя.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Можно ли продолжать использовать Qwen-модели бесплатно?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Да. Free-теги Qwen есть в OpenRouter (open-source модели Qwen 2.5/3 Coder), плюс некоторые провайдеры (например, agentrouter.org) дают доступ к Qwen в составе общего пула моделей с промо-кредитами. Локально Qwen 3 Coder можно гонять через ollama или vLLM, если есть видеокарта.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Что выбрать вместо qwen-code если я кодю в терминале?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Aider или Codex CLI. Оба работают как qwen-code: запускаешь в директории, описываешь задачу — агент правит файлы. Aider даёт нативную интеграцию с git, Codex CLI — это официальный CLI от OpenAI с поддержкой нескольких моделей.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'А что если я работаю в VS Code?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Бери Cline или Roo Code — это расширения VS Code, которые работают как агенты внутри редактора, имеют доступ к файлам, могут запускать команды. По функционалу они мощнее qwen-code, по сложности — примерно такие же.',
+      },
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  path={`guides/${meta.slug}/`}
+  jsonLd={[articleLd, faqLd]}
+>
+  <article class="guide">
+    <p style="margin-top: 30px;"><a href={`${base}/guides/`}>← Все гайды</a></p>
+    <h1>{meta.title}</h1>
+    <p class="meta-row">
+      Опубликовано: {meta.datePublished}
+      {meta.dateModified !== meta.datePublished && <> · Обновлено: {meta.dateModified}</>}
+      {' · '}автор: <a href={site.url}>Вайб Кодер</a> · источники:
+      <a href={site.telegram.url}> Telegram</a> · <a href={site.youtube.url}>YouTube</a>
+    </p>
+
+    <div class="tldr">
+      <h2>TL;DR</h2>
+      <ul>
+        <li>15.04.2026 Qwen Code CLI закрыл бесплатный OAuth — халявы больше нет.</li>
+        <li>5 рабочих альтернатив: <strong>Cline</strong>, <strong>Kilo Code</strong>, <strong>Claude Code</strong>, <strong>Codex CLI</strong>, <strong>Aider</strong>.</li>
+        <li>Самые универсальные: Cline (VS Code) и Aider (CLI).</li>
+        <li>Все работают через API-ключи; ключи можно достать бесплатно (см. <a href={`${base}/guides/claude-opus-besplatno/`}>гайд по халяве</a>).</li>
+        <li>Если хочется аналог именно по UX qwen-code — ставь <strong>Aider</strong>.</li>
+      </ul>
+    </div>
+
+    <h2>Что произошло</h2>
+    <p>
+      15 апреля 2026 Alibaba Cloud (владелец Qwen) закрыл бесплатный OAuth-флоу
+      в официальном <code>qwen-code</code> CLI. До этого инструмент работал
+      по схеме: ставишь CLI, логинишься в Alibaba-аккаунт через браузер, и
+      агент ходит в Qwen 3 Coder фактически бесплатно (с щедрыми лимитами).
+    </p>
+    <p>
+      Теперь это всё. CLI остался, но требует <strong>платный API-ключ DashScope</strong>.
+      Платить китайскому облаку из России — отдельный квест, плюс это уже не
+      бесплатная история. Для русскоязычных вайбкодеров инструмент фактически
+      выпал.
+    </p>
+    <div class="warn">
+      Если у тебя ещё работает <code>qwen-code</code> со старым OAuth-токеном —
+      это до первого истечения токена. Готовиться к миграции лучше сейчас.
+    </div>
+
+    <h2>Что выбираем взамен — короткое сравнение</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Инструмент</th>
+          <th>Где работает</th>
+          <th>Похож на qwen-code по UX</th>
+          <th>Лучшее для</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Cline</td>
+          <td>VS Code (расширение)</td>
+          <td>Очень похож (чат + actions)</td>
+          <td>Универсальный агент в редакторе</td>
+        </tr>
+        <tr>
+          <td>Kilo Code</td>
+          <td>VS Code / standalone</td>
+          <td>Похож, упор на тулинг</td>
+          <td>Сложные многошаговые задачи</td>
+        </tr>
+        <tr>
+          <td>Claude Code</td>
+          <td>CLI (Anthropic, официальный)</td>
+          <td>Сильно похож</td>
+          <td>Терминал + Claude Sonnet/Opus</td>
+        </tr>
+        <tr>
+          <td>Codex CLI</td>
+          <td>CLI (OpenAI, официальный)</td>
+          <td>Похож</td>
+          <td>Терминал + GPT-модели</td>
+        </tr>
+        <tr>
+          <td>Aider</td>
+          <td>CLI (open-source)</td>
+          <td>Максимально похож</td>
+          <td>git-aware рефакторинги</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="cline">1. Cline — расширение VS Code</h2>
+    <p>
+      <a href="https://github.com/cline/cline" rel="nofollow noopener" target="_blank">Cline</a>
+      (бывш. Claude Dev) — это open-source агент в виде расширения VS Code.
+      Открываешь sidebar, описываешь задачу, агент читает файлы, правит, бежит
+      команды в терминале и показывает дифф перед коммитом.
+    </p>
+    <p>
+      Ставится:
+    </p>
+    <ol>
+      <li>В VS Code → Extensions → ищи <code>Cline</code> → Install.</li>
+      <li>Открой sidebar Cline → шестерёнка <strong>Settings</strong>.</li>
+      <li>Выбери провайдера: Anthropic, OpenAI, OpenRouter, agentrouter (OpenAI Compatible).</li>
+      <li>Вставь свой API-ключ.</li>
+    </ol>
+    <p>
+      Бесплатные модели:
+    </p>
+    <ul>
+      <li>Через OpenRouter — DeepSeek-Coder, Qwen 2.5 Coder, Llama 3.3 (теги <code>:free</code>).</li>
+      <li>Через agentrouter — Claude Opus / Sonnet / GPT 5.5 на промо-кредиты.</li>
+    </ul>
+
+    <h2 id="kilo-code">2. Kilo Code</h2>
+    <p>
+      <a href="https://kilocode.ai" rel="nofollow noopener" target="_blank">Kilo Code</a> —
+      ещё один агентский инструмент, развивается как форк/конкурент Cline. Главное
+      отличие — собственный набор тулзов (file-search, code-search, более
+      продвинутый planning под длинные задачи) и встроенная поддержка прокси-провайдеров.
+    </p>
+    <p>
+      Установка и настройка — практически идентична Cline. Подробнее по подключению
+      Kilo Code к agentrouter.org для бесплатного Opus — см.
+      <a href={`${base}/guides/agentrouter-250/`}>гайд про agentrouter $250</a>.
+    </p>
+
+    <h2 id="claude-code">3. Claude Code (CLI от Anthropic)</h2>
+    <p>
+      <a href="https://github.com/anthropics/claude-code" rel="nofollow noopener" target="_blank">Claude Code</a>
+      — официальный CLI от Anthropic. Ставится глобально, запускается из любой
+      директории. Работает в терминале, по UX очень похож на qwen-code: пишешь
+      задачу, агент копается в файлах и правит.
+    </p>
+    <p>
+      Ставится:
+    </p>
+    <pre><code>npm install -g @anthropic-ai/claude-code</code></pre>
+    <p>
+      Запуск:
+    </p>
+    <pre><code>cd /path/to/your/project
+claude</code></pre>
+    <p>
+      По умолчанию хочет ключ Anthropic (платный). Но можно подсунуть
+      OpenAI-совместимый base URL через переменные окружения и ходить через
+      бесплатные/льготные провайдеры:
+    </p>
+    <pre><code>export ANTHROPIC_BASE_URL="https://agentrouter.org/v1"
+export ANTHROPIC_API_KEY="ar-..."
+claude</code></pre>
+    <p>
+      Так Claude Code будет ходить в Opus/Sonnet через твой баланс agentrouter.
+    </p>
+
+    <h2 id="codex-cli">4. Codex CLI (от OpenAI)</h2>
+    <p>
+      <a href="https://github.com/openai/codex" rel="nofollow noopener" target="_blank">Codex CLI</a> —
+      официальный аналог Claude Code от OpenAI. Похож по логике, но
+      использует GPT-5/GPT-5.5 как мозг агента.
+    </p>
+    <pre><code>npm install -g @openai/codex
+cd /path/to/project
+codex</code></pre>
+    <p>
+      Поддерживает кастомный base URL через переменные окружения, можно
+      подключить через agentrouter / OpenRouter с бесплатными моделями.
+    </p>
+
+    <h2 id="aider">5. Aider — самый близкий по духу к qwen-code</h2>
+    <p>
+      <a href="https://aider.chat" rel="nofollow noopener" target="_blank">Aider</a> —
+      open-source CLI-агент. <strong>Самая близкая</strong> по UX замена
+      qwen-code, плюс мощная фишка: aider <strong>сам коммитит изменения в git</strong>
+      за тебя — каждый ответ агента превращается в отдельный коммит, видно
+      историю «что изменилось от какой просьбы».
+    </p>
+    <p>
+      Ставится:
+    </p>
+    <pre><code>pip install aider-chat</code></pre>
+    <p>
+      Запуск с разными моделями:
+    </p>
+    <pre><code># Через DeepSeek-Coder (есть бесплатные ключи)
+aider --model deepseek/deepseek-coder
+
+# Через OpenRouter с любой моделью
+export OPENROUTER_API_KEY="..."
+aider --model openrouter/qwen/qwen-2.5-coder-32b-instruct
+
+# Через agentrouter (OpenAI-compatible)
+export OPENAI_API_BASE="https://agentrouter.org/v1"
+export OPENAI_API_KEY="ar-..."
+aider --model openai/claude-opus-4.7</code></pre>
+    <p>
+      Из коробки знает про десятки провайдеров, удобно конфигурится через
+      <code>~/.aider.conf.yml</code>, есть голосовой ввод и поддержка
+      multi-file редактирования.
+    </p>
+
+    <h2>Какой инструмент выбрать под мой случай</h2>
+    <ul>
+      <li>
+        <strong>Я кодил в qwen-code в терминале</strong> → Aider. Самый близкий
+        UX + git нативно.
+      </li>
+      <li>
+        <strong>Я работаю в VS Code</strong> → Cline или Kilo Code. Cline проще,
+        Kilo Code продвинутее.
+      </li>
+      <li>
+        <strong>Я хочу официальный продукт от Anthropic / OpenAI</strong> →
+        Claude Code или Codex CLI. Стабильнее, но привязаны к экосистеме.
+      </li>
+      <li>
+        <strong>Мне важна поддержка open-source моделей (Qwen, DeepSeek)</strong>
+        → Aider. Лучше всех работает с разными провайдерами одновременно.
+      </li>
+    </ul>
+
+    <h2>А как насчёт самих Qwen-моделей? Они ещё работают?</h2>
+    <p>
+      Да, конечно. Закрыли только халявный CLI — сами модели Qwen 3 Coder
+      доступны:
+    </p>
+    <ul>
+      <li>В <strong>OpenRouter</strong> — есть free-теги Qwen 2.5 / 3 Coder
+      32B и 72B. Лимиты есть, но достаточно для повседневной работы.</li>
+      <li>В <strong>agentrouter.org</strong> — Qwen в общем пуле моделей.</li>
+      <li><strong>Локально</strong> через ollama / vLLM, если есть видеокарта
+      32+ GB VRAM. Бесплатно навсегда, оффлайн, но требует железа.</li>
+      <li>На <strong>Hugging Face Inference</strong> — несколько провайдеров
+      хостят Qwen 3 Coder с бесплатными квотами.</li>
+    </ul>
+    <p>
+      То есть Qwen-моделями пользоваться можно как раньше — просто через
+      другой клиент (Cline / Aider / Continue) и другой бэкенд (OpenRouter /
+      agentrouter / локально).
+    </p>
+
+    <h2>FAQ</h2>
+    <details class="faq" open>
+      <summary>Когда qwen-code ещё работал бесплатно?</summary>
+      <p>
+        До 15 апреля 2026. После этой даты Alibaba Cloud отозвала бесплатный
+        OAuth-доступ. Старые токены постепенно истекают.
+      </p>
+    </details>
+    <details class="faq">
+      <summary>Чем именно Aider лучше Cline?</summary>
+      <p>
+        Aider лучше, если ты живёшь в терминале и работаешь с git — он
+        автоматически коммитит каждое изменение, удобно откатывать ошибки.
+        Cline лучше, если ты живёшь в VS Code и хочешь видеть дифф в редакторе
+        перед применением. Это вопрос стиля.
+      </p>
+    </details>
+    <details class="faq">
+      <summary>Можно ли использовать несколько агентов одновременно?</summary>
+      <p>
+        Да. Например, Cline в VS Code для текущей задачи + Aider в терминале
+        для рефакторинга в фоне + Claude Code для большого ремонта. У каждого
+        свой контекст, друг другу они не мешают.
+      </p>
+    </details>
+    <details class="faq">
+      <summary>Что делать если новый CLI ругается на API-ключ?</summary>
+      <p>
+        Проверь, что переменная окружения экспортирована именно в той же
+        сессии, где запускаешь CLI (<code>echo $OPENAI_API_KEY</code>).
+        Часто причина — забытый <code>export</code> или неверный base URL.
+      </p>
+    </details>
+    <details class="faq">
+      <summary>Где брать обновления, если что-то ещё закроется?</summary>
+      <p>
+        В TG-канале <a href={site.telegram.url}>@abuz_ai</a>: как только
+        очередной провайдер закрывает халяву или появляется новая акция —
+        пишем сразу. На YouTube «<a href={site.youtube.url}>Вайб Кодер</a>»
+        выходят видео-разборы под крупные миграции.
+      </p>
+    </details>
+
+    <h2>Соседние гайды</h2>
+    <ul>
+      <li><a href={`${base}/guides/agentrouter-250/`}>$250 на agentrouter.org для Claude Opus / GPT</a></li>
+      <li><a href={`${base}/guides/claude-opus-besplatno/`}>Claude Opus 4.7 и GPT 5.5 бесплатно — все способы</a></li>
+    </ul>
+  </article>
+</BaseLayout>

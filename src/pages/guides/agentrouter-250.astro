@@ -1,0 +1,408 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+import { guides } from '../../data/guides';
+
+const meta = guides.find((g) => g.slug === 'agentrouter-250')!;
+const base = site.base;
+const url = `${site.url}/guides/${meta.slug}/`;
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: meta.title,
+  description: meta.description,
+  url,
+  inLanguage: 'ru',
+  datePublished: meta.datePublished,
+  dateModified: meta.dateModified,
+  author: { '@type': 'Person', name: 'Вайб Кодер', url: site.url, sameAs: [site.telegram.url, site.youtube.url] },
+  publisher: { '@type': 'Person', name: 'Вайб Кодер', url: site.url },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  keywords: meta.topics.join(', '),
+  about: meta.topics.map((t) => ({ '@type': 'Thing', name: t })),
+  isPartOf: { '@type': 'WebSite', name: site.name, url: site.url },
+};
+
+const howToLd = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'Получить $250 кредитов на Claude Opus и GPT через agentrouter.org',
+  description:
+    'Пошаговая инструкция: регистрация на agentrouter.org, получение бонусных кредитов и подключение API-ключа к кодинг-агентам Kilo Code, Cline и Cursor.',
+  inLanguage: 'ru',
+  totalTime: 'PT15M',
+  estimatedCost: { '@type': 'MonetaryAmount', currency: 'USD', value: '0' },
+  yield: 'До $250 кредитов на API-вызовы топовых моделей (Claude Opus 4.7, GPT 5.5, Sonnet и др.)',
+  supply: [
+    { '@type': 'HowToSupply', name: 'Email для регистрации' },
+    { '@type': 'HowToSupply', name: 'Любой кодинг-агент (Kilo Code, Cline в VS Code или Cursor)' },
+  ],
+  step: [
+    {
+      '@type': 'HowToStep',
+      position: 1,
+      name: 'Регистрация на agentrouter.org',
+      text: 'Перейдите на agentrouter.org, зарегистрируйте аккаунт по email, подтвердите регистрацию по ссылке из письма.',
+      url: url + '#step-1',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 2,
+      name: 'Активация бонуса по акции',
+      text: 'Откройте раздел Billing / Promotions, активируйте промо-кредит. На баланс зачисляется до $250 в зависимости от условий текущей акции.',
+      url: url + '#step-2',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 3,
+      name: 'Создание API-ключа',
+      text: 'В разделе API Keys создайте новый ключ, скопируйте его — он понадобится для подключения к редактору кода.',
+      url: url + '#step-3',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 4,
+      name: 'Подключение к Kilo Code',
+      text: 'В Kilo Code зайдите в Settings → Providers, выберите agentrouter (или OpenAI-compatible), укажите base URL agentrouter и вставьте API-ключ. Выберите модель Claude Opus или GPT 5.5.',
+      url: url + '#step-4',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 5,
+      name: 'Подключение к Cline в VS Code',
+      text: 'В Cline (расширение VS Code) выберите OpenAI-compatible провайдера, укажите base URL agentrouter и API-ключ.',
+      url: url + '#step-5',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 6,
+      name: 'Подключение к Cursor',
+      text: 'В Cursor → Settings → Models добавьте свой кастомный OpenAI-base URL (agentrouter), вставьте API-ключ. Cursor будет ходить за моделями через ваш баланс.',
+      url: url + '#step-6',
+    },
+  ],
+  video: meta.videoId
+    ? {
+        '@type': 'VideoObject',
+        name: 'Видео-разбор акции agentrouter.org',
+        description: 'Видеоинструкция по подключению API-ключа agentrouter.org к Kilo Code',
+        thumbnailUrl: `https://i.ytimg.com/vi/${meta.videoId}/hqdefault.jpg`,
+        uploadDate: meta.datePublished,
+        embedUrl: `https://www.youtube.com/embed/${meta.videoId}`,
+        contentUrl: `https://www.youtube.com/watch?v=${meta.videoId}`,
+      }
+    : undefined,
+};
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Что такое agentrouter.org?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'agentrouter.org — это OpenAI-совместимый прокси-провайдер, который агрегирует доступ к Claude Opus, GPT, Sonnet и другим топовым моделям через единый API-ключ. У провайдера регулярно проходят акции с бонусными кредитами для новых пользователей — на момент апреля 2026 это до $250.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Это безопасно? Не забанят ли мой аккаунт OpenAI / Anthropic?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Это легальный сторонний провайдер API — он не использует ваши учётные записи OpenAI или Anthropic, а имеет собственные коммерческие соглашения. У вас не будет проблем с аккаунтами оригинальных поставщиков.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'На сколько хватает $250 кредитов?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Зависит от модели. Для Claude Opus 4.7 это сотни обычных диалогов или десятки полноценных сессий vibe coding. На GPT 5.5 — ещё дольше, у него ниже цена за токен. Если экономно — кредитов хватает на несколько недель активной работы.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Какие IDE и кодинг-агенты поддерживаются?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Любые, где можно указать кастомный OpenAI-совместимый base URL: Kilo Code, Cline (расширение VS Code), Roo Code, Cursor (через custom OpenAI), Continue.dev, Aider, любой клиент OpenAI SDK. Внутри редактора нужно указать base URL agentrouter и API-ключ.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Что делать если кредиты заканчиваются?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Можно зарегистрировать новый аккаунт на другую почту (если правила акции это позволяют) или дождаться следующей акции. Текущие активные акции и промокоды публикуются в Telegram-канале @abuz_ai.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Где смотреть актуальную видеоинструкцию?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Видеоразбор по подключению API-ключа agentrouter.org к Kilo Code опубликован на YouTube-канале «Вайб Кодер». Ссылка вшита в эту страницу выше.',
+      },
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={meta.title}
+  description={meta.description}
+  path={`guides/${meta.slug}/`}
+  jsonLd={[articleLd, howToLd, faqLd]}
+  ogImage={meta.videoId ? `https://i.ytimg.com/vi/${meta.videoId}/hqdefault.jpg` : undefined}
+>
+  <article class="guide">
+    <p style="margin-top: 30px;"><a href={`${base}/guides/`}>← Все гайды</a></p>
+    <h1>{meta.title}</h1>
+    <p class="meta-row">
+      Опубликовано: {meta.datePublished}
+      {meta.dateModified !== meta.datePublished && <> · Обновлено: {meta.dateModified}</>}
+      {' · '}автор: <a href={site.url}>Вайб Кодер</a> · источники:
+      <a href={site.telegram.url}> Telegram</a> · <a href={site.youtube.url}>YouTube</a>
+    </p>
+
+    <div class="tldr">
+      <h2>TL;DR</h2>
+      <ul>
+        <li>Провайдер <strong>agentrouter.org</strong> раздаёт до <strong>$250 кредитов</strong> на API после регистрации.</li>
+        <li>Кредиты тратятся на <strong>Claude Opus 4.7, GPT 5.5, Sonnet</strong> и другие топовые модели.</li>
+        <li>API-ключ подключается к <strong>Kilo Code</strong>, <strong>Cline в VS Code</strong>, <strong>Cursor</strong> и любому OpenAI-совместимому клиенту.</li>
+        <li>Время на подключение: ~10–15 минут. Оплаты не требуется.</li>
+        <li>Видеоразбор — ниже на странице.</li>
+      </ul>
+    </div>
+
+    {meta.videoId && (
+      <div class="video-embed" style="margin: 18px 0 24px;">
+        <iframe
+          src={`https://www.youtube.com/embed/${meta.videoId}`}
+          title={meta.title}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          loading="lazy"
+        ></iframe>
+      </div>
+    )}
+
+    <h2>Что такое agentrouter.org</h2>
+    <p>
+      <a href="https://agentrouter.org" rel="nofollow noopener" target="_blank">agentrouter.org</a> — это
+      OpenAI-совместимый прокси-провайдер: одной регистрацией ты получаешь
+      доступ сразу к <strong>топовым моделям всех крупных лабораторий</strong> —
+      Claude Opus 4.7, Sonnet, GPT 5.5, Gemini Pro, опенсорсные модели — через
+      один API-ключ и единый <code>base_url</code>.
+    </p>
+    <p>
+      Это удобно по двум причинам. Первая: ты не зависишь от одной экосистемы
+      (Anthropic / OpenAI / Google) и можешь дёшево переключаться между моделями
+      внутри одного диалога. Вторая, и для нас важная: у провайдера
+      <strong>периодически идут акции для новых пользователей</strong> — обычно
+      это $50–250 промокредитов, которыми можно пользоваться без привязки карты.
+    </p>
+    <p>
+      На апрель 2026 акция активна и даёт <strong>до $250 на аккаунт</strong>.
+      Этого хватает на несколько недель плотной работы с Claude Opus или
+      на месяцы с более дешёвыми моделями.
+    </p>
+
+    <h2>Что нужно перед стартом</h2>
+    <ul>
+      <li>Email, на который ещё не было регистрации в agentrouter.</li>
+      <li>Любой кодинг-агент: Kilo Code, Cline (VS Code), Cursor, Roo Code, Continue, Aider — что используешь.</li>
+      <li>~15 минут времени.</li>
+    </ul>
+    <p>Карту привязывать <strong>не нужно</strong>. Кредиты начисляются автоматом по акции.</p>
+
+    <h2 id="steps">Пошаговая инструкция</h2>
+
+    <div class="step" id="step-1">
+      <h3>Шаг 1. Регистрация на agentrouter.org</h3>
+      <ol>
+        <li>Открой <a href="https://agentrouter.org" rel="nofollow noopener" target="_blank">agentrouter.org</a>.</li>
+        <li>Нажми <strong>Sign up</strong>, введи email и пароль.</li>
+        <li>Подтверди регистрацию по ссылке в письме.</li>
+        <li>Войди в дашборд.</li>
+      </ol>
+    </div>
+
+    <div class="step" id="step-2">
+      <h3>Шаг 2. Активация бонусных $250</h3>
+      <ol>
+        <li>В дашборде открой раздел <strong>Billing</strong> или <strong>Promotions</strong>.</li>
+        <li>Если виден активный промо-баннер — жми <strong>Activate</strong> / <strong>Claim</strong>.</li>
+        <li>Если в твоей версии интерфейса промо требует ввода кода — актуальный код смотри в закрепе TG-канала <a href={site.telegram.url}>@abuz_ai</a>, его обновляем после каждой смены условий акции.</li>
+        <li>На балансе должно появиться $250 (или текущий размер бонуса по акции).</li>
+      </ol>
+      <div class="warn">
+        Если поле баланса пустое — проверь, не действует ли акция только для
+        первых N регистраций в сутки. В таком случае попробуй на следующее утро
+        по UTC: счётчик квот обычно сбрасывается раз в сутки.
+      </div>
+    </div>
+
+    <div class="step" id="step-3">
+      <h3>Шаг 3. Создание API-ключа</h3>
+      <ol>
+        <li>В дашборде → <strong>API Keys</strong> → <strong>Create new key</strong>.</li>
+        <li>Дай ключу понятное имя (например <code>kilo-code</code>).</li>
+        <li>Скопируй ключ — формат типа <code>ar-…</code> или <code>sk-…</code>. Сохрани его сразу: после закрытия модалки полное значение больше не покажут.</li>
+        <li>Запомни <strong>base URL</strong> провайдера (он показан в дашборде в разделе Quick Start) — обычно это что-то вроде <code>https://agentrouter.org/v1</code>.</li>
+      </ol>
+    </div>
+
+    <div class="step" id="step-4">
+      <h3>Шаг 4. Подключение к Kilo Code</h3>
+      <ol>
+        <li>Открой Kilo Code → <strong>Settings</strong> → <strong>Providers</strong>.</li>
+        <li>Выбери <strong>OpenAI Compatible</strong> (или непосредственно <em>agentrouter</em>, если он есть в списке).</li>
+        <li>В поле <strong>Base URL</strong> вставь URL из шага 3 (например <code>https://agentrouter.org/v1</code>).</li>
+        <li>В поле <strong>API Key</strong> — твой ключ.</li>
+        <li>В выпадающем списке <strong>Model</strong> выбери <code>claude-opus-4.7</code>, <code>gpt-5.5</code>, <code>claude-sonnet-4.5</code> и т.д. — список зависит от того, что в текущий момент включено у провайдера.</li>
+        <li>Сохрани конфиг и отправь тестовый запрос.</li>
+      </ol>
+      <p>
+        Полный видеоразбор именно этого шага — в видео в начале страницы
+        (актуально на 30.04.2026).
+      </p>
+    </div>
+
+    <div class="step" id="step-5">
+      <h3>Шаг 5. Подключение к Cline в VS Code</h3>
+      <ol>
+        <li>Установи расширение <strong>Cline</strong> в VS Code (через Extensions Marketplace).</li>
+        <li>Открой Cline → шестерёнка <strong>Settings</strong>.</li>
+        <li>В разделе <strong>API Provider</strong> выбери <strong>OpenAI Compatible</strong>.</li>
+        <li>Заполни поля: <strong>Base URL</strong> → URL agentrouter, <strong>API Key</strong> → твой ключ, <strong>Model ID</strong> → имя модели (например <code>claude-opus-4.7</code>).</li>
+        <li>Сохрани и проверь, отправив простую задачу.</li>
+      </ol>
+    </div>
+
+    <div class="step" id="step-6">
+      <h3>Шаг 6. Подключение к Cursor</h3>
+      <ol>
+        <li>Cursor → <strong>Settings</strong> → <strong>Models</strong>.</li>
+        <li>Прокрути вниз до раздела <strong>OpenAI API key</strong> (или <strong>Custom Models</strong>).</li>
+        <li>Включи <strong>Override OpenAI Base URL</strong> и вставь URL agentrouter.</li>
+        <li>В поле <strong>OpenAI API Key</strong> — твой ключ от agentrouter.</li>
+        <li>Жми <strong>Verify</strong>. Если всё корректно — Cursor начнёт ходить за моделями через твой баланс agentrouter.</li>
+      </ol>
+      <div class="warn">
+        Cursor агрессивно использует токены под капотом (длинный системный
+        контекст, фоновые agent-запросы). Для долгой работы лучше выставлять
+        более экономную модель типа Sonnet или GPT-5.5-mini, а Opus подключать
+        точечно для самых сложных задач.
+      </div>
+    </div>
+
+    <h2>Частые ошибки и как их чинить</h2>
+    <ul>
+      <li>
+        <strong>«Insufficient credits» при первом же запросе</strong> — проверь
+        баланс в дашборде. Бывает, что промо-кредит активируется не сразу, а
+        после верификации email; повтори активацию через 5–10 минут.
+      </li>
+      <li>
+        <strong>«Model not found» / 404</strong> — модель в твоём редакторе
+        написана не так, как ждёт провайдер. Зайди в дашборд agentrouter,
+        посмотри точные ID моделей в разделе <em>Models</em> и скопируй один в один.
+      </li>
+      <li>
+        <strong>Агент завис на «Generating…»</strong> — у некоторых моделей
+        большой latency на первый запрос. Подожди 30–60 секунд, или попробуй
+        более лёгкую модель (Sonnet, GPT-5.5-mini).
+      </li>
+      <li>
+        <strong>Cursor не видит кастомный URL</strong> — после ввода URL и
+        ключа нужно нажать <em>Verify</em>; без верификации Cursor молча
+        падает обратно на свои встроенные модели и быстро ест встроенный
+        Cursor-баланс.
+      </li>
+    </ul>
+
+    <h2>Сколько хватит $250 на практике</h2>
+    <p>
+      Грубые ориентиры (по тарифам провайдеров на апрель 2026):
+    </p>
+    <table>
+      <thead>
+        <tr><th>Модель</th><th>Цена за 1M токенов вход/выход</th><th>Сколько диалогов</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Claude Opus 4.7</td><td>~$15 / $75</td><td>~150–300 длинных диалогов</td></tr>
+        <tr><td>GPT 5.5</td><td>~$10 / $40</td><td>~300–500 диалогов</td></tr>
+        <tr><td>Sonnet 4.5</td><td>~$3 / $15</td><td>~1000+ диалогов</td></tr>
+        <tr><td>GPT 5.5-mini</td><td>~$0.5 / $2</td><td>~5000+ диалогов</td></tr>
+      </tbody>
+    </table>
+    <p>
+      Если сидеть в основном на Sonnet, $250 хватает на 1–2 месяца плотной
+      работы (vibe coding, написание кода через Cline / Kilo Code, ревью в
+      Cursor). Для эпизодических Opus-запросов под сложные задачи — кредитов
+      хватает с большим запасом.
+    </p>
+
+    <h2>FAQ</h2>
+    <details class="faq" open>
+      <summary>Это безопасно? Не забанят ли мне аккаунт у Anthropic / OpenAI?</summary>
+      <p>
+        Нет. agentrouter — независимый коммерческий провайдер, у него свои
+        контракты с лабораториями. Твой аккаунт у Anthropic или OpenAI они
+        не трогают.
+      </p>
+    </details>
+    <details class="faq">
+      <summary>Если потрачу $250 — можно ли получить ещё?</summary>
+      <p>
+        В рамках одной акции — нет. Можно следить за следующими акциями (мы
+        анонсируем их в Telegram <a href={site.telegram.url}>@abuz_ai</a>),
+        либо использовать другой email для нового аккаунта, если правила
+        акции это позволяют.
+      </p>
+    </details>
+    <details class="faq">
+      <summary>Какие IDE кроме VS Code и Cursor поддерживаются?</summary>
+      <p>
+        Любые, где можно указать кастомный OpenAI-совместимый <code>base_url</code>:
+        Continue.dev (JetBrains, VS Code), Aider, Open WebUI, LibreChat, кастомные
+        приложения на OpenAI SDK. Логика подключения везде одинаковая.
+      </p>
+    </details>
+    <details class="faq">
+      <summary>Можно ли использовать в продакшене / в коммерческом проекте?</summary>
+      <p>
+        Промо-кредиты обычно даются для тестов и личного использования.
+        Условия читай в <em>Terms</em> провайдера. Если планируешь использовать
+        в коммерческой работе — обычно проще пополнить баланс по карте.
+      </p>
+    </details>
+    <details class="faq">
+      <summary>Где брать актуальные обновления по акции?</summary>
+      <p>
+        В TG-канале <a href={site.telegram.url}>@abuz_ai</a>: как только
+        условия меняются, обновляется промокод или акция перестаёт работать —
+        сразу публикуется пост.
+      </p>
+    </details>
+
+    <h2>Дальше</h2>
+    <p>
+      Если эта схема зашла, посмотри другие наши гайды:
+    </p>
+    <ul>
+      <li><a href={`${base}/guides/claude-opus-besplatno/`}>Claude Opus 4.7 и GPT 5.5 бесплатно: все рабочие способы</a></li>
+      <li><a href={`${base}/guides/qwen-cli-alternativy/`}>Qwen Code CLI закрылся — 5 рабочих альтернатив</a></li>
+    </ul>
+    <p>
+      И обязательно — Telegram <a href={site.telegram.url}>@abuz_ai</a> и
+      YouTube «<a href={site.youtube.url}>Вайб Кодер</a>». Все свежие акции,
+      промокоды и видео-разборы выходят там в день появления.
+    </p>
+  </article>
+</BaseLayout>
