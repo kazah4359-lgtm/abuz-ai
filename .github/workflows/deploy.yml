@@ -5,8 +5,11 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    # Refresh content from Telegram + YouTube every 2 hours
-    - cron: '17 */2 * * *'
+    # Refresh content from Telegram + YouTube once a day (03:17 UTC).
+    # The site picks up new TG posts and YouTube videos within ~24h
+    # of publication. Manual rebuilds are still available via
+    # workflow_dispatch ("Run workflow" button).
+    - cron: '17 3 * * *'
 
 # Required for GitHub Pages deploy via official action
 permissions:
